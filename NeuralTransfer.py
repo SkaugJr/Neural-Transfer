@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+import torchvision
 
 from PIL import Image
 import matplotlib.pyplot as plt
@@ -36,9 +37,10 @@ style_img = image_loader("images/picasso.jpg")
 content_img = image_loader("images/dancing.jpg")
 
 
-print(style_img.device)  # Prints: cuda:0 if the tensor is on the GPU, otherwise cpu
-print(content_img.device)
-print(torch.__version__)
+
+#print(torch.__version__)
+#print(torchvision.__version__)
+
 print(torch.cuda.is_available())
 
 assert style_img.size() == content_img.size(), \
