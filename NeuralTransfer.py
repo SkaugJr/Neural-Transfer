@@ -16,32 +16,26 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 torch.set_default_device(device)
 
 # desired size of the output image
-imsize = 512 if torch.cuda.is_available() else 128
+width = 720 if torch.cuda.is_available() else 128
+height = int(width * 3 / 4)  # maintain a 4:3 aspect ratio
 
 loader = transforms.Compose([
-    transforms.Resize(imsize),  # scale imported image
+    transforms.Resize((height, width)),  # scale imported image
     transforms.ToTensor()])  # transform it into a torch tensor
 
 
 def image_loader(image_name):
     image = Image.open(image_name)
     # Resize the image to the specific size
-    image = transforms.Resize((imsize,imsize))(image)
+    image = transforms.Resize((height, width))(image)
     # fake batch dimension required to fit network's input dimensions
     image = loader(image).unsqueeze(0)
     return image.to(device, torch.float)
 
 
-
 style_img = image_loader("images/picasso.jpg")
-content_img = image_loader("images/dancing.jpg")
+content_img = image_loader("images/AKL2.jpg")
 
-
-
-#print(torch.__version__)
-#print(torchvision.__version__)
-
-print(torch.cuda.is_available())
 
 assert style_img.size() == content_img.size(), \
     "we need to import style and content images of the same size"
@@ -263,10 +257,15 @@ def run_style_transfer(cnn, normalization_mean, normalization_std,
 
     return input_img
 
-#output = run_style_transfer(cnn, cnn_normalization_mean, cnn_normalization_std, content_img, style_img, input_img)
+output = run_style_transfer(cnn, cnn_normalization_mean, cnn_normalization_std, content_img, style_img, input_img)
 
-#plt.figure()
-#imshow(output, title='Output Image')
+plt.figure()
+imshow(output, title='Output Image')
 # sphinx_gallery_thumbnail_number = 4
-#plt.ioff()
-#plt.show()
+plt.ioff()
+plt.show()
+
+#print(torch.__version__)
+#print(torchvision.__version__)
+
+#print(torch.cuda.is_available())
