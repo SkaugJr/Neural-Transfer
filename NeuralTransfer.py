@@ -12,6 +12,9 @@ from torchvision.models import vgg19, VGG19_Weights
 
 import copy
 
+## Kjør denne kommandoen for å installere pytorch og torchvision med cuda
+## pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121 
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 torch.set_default_device(device)
 
@@ -33,8 +36,8 @@ def image_loader(image_name):
     return image.to(device, torch.float)
 
 
-style_img = image_loader("images/picasso.jpg")
-content_img = image_loader("images/AKL2.jpg")
+style_img = image_loader("images/landscape.jpg")
+content_img = image_loader("images/dancing.jpg")
 
 
 assert style_img.size() == content_img.size(), \
@@ -261,7 +264,8 @@ output = run_style_transfer(cnn, cnn_normalization_mean, cnn_normalization_std, 
 
 plt.figure()
 imshow(output, title='Output Image')
-# sphinx_gallery_thumbnail_number = 4
+
+plt.subplots_adjust(top=1, right=1, bottom=0, left=0)
 plt.ioff()
 plt.show()
 
